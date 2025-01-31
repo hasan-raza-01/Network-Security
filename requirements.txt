@@ -1,0 +1,9 @@
+mlflow
+dagshub
+dvc
+bentoml
+python-dotenv
+python-box
+ipykernel
+pymongo
+scikit-learn
