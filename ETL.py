@@ -1,4 +1,3 @@
-from package.logger import logging
 from package.exception import CustomException
 import sys
 import pymongo
@@ -9,10 +8,14 @@ import os
 import certifi
 from dotenv import load_dotenv
 from dataclasses import dataclass
+import yaml
 
+
+# loading environment variable
 load_dotenv()
 uri = os.getenv("URI")
 
+# connecting safely
 ca = certifi.where()
 
 
@@ -32,11 +35,10 @@ class ExtractTransformLoad:
             list: list of json for the whole file.
         """
         try:
-            data = pd.read_csv(path)
-            records = list(json.loads(data.T.to_json()).values())
+            self.data = pd.read_csv(path)
+            records = list(json.loads(self.data.T.to_json()).values())
             return records
         except Exception as e:
-            logging.error(e)
             raise CustomException(e, sys)
         
     def push_to_db(self, records:list, collection:list)-> int:
@@ -55,7 +57,30 @@ class ExtractTransformLoad:
             self.collection.insert_many(self.records)
             return len(records)
         except Exception as e:
-            logging.error(e)
+            raise CustomException(e, sys)
+        
+    def save_schema(self)->None:
+        """saves the schema data
+        """
+        try:
+            path = "schema"
+            os.makedirs(path, exist_ok=True)
+
+            schema = dict()
+            columns_with_dtype = dict()
+            numerical_columns = list()
+
+            for col in self.data.columns:
+                columns_with_dtype[col] = str(self.data[col].dtype)
+                if self.data[col].dtype!="O":
+                    numerical_columns.append(col)
+
+            schema["columns"] = columns_with_dtype
+            schema["numerical_columns"] = numerical_columns
+
+            with open(os.path.join(path, "schema.yaml"), "w") as file:
+                yaml.safe_dump(schema, file)
+        except Exception as e:
             raise CustomException(e, sys)
         
     def main(self)-> int:
