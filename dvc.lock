@@ -12,7 +12,8 @@ stages:
       md5: 91c22cd75e2f11b65f6992bad28ac18b
       size: 754
     outs:
-    - path: artifacts/data/ingestion/feature_store/raw.csv
+    - path: artifacts/data/ingestion
       hash: md5
-      md5: abd0b0c50c50f58da2cd6cb028af76b8
-      size: 800203
+      md5: 7dfcbb8319e7e7d8657b38aeabb2bb52.dir
+      size: 1600834
+      nfiles: 3
