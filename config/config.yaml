@@ -1,17 +1,28 @@
-ARITFACTS_ROOT_DIR: artifacts
+ARITFACTS_ROOT_DIR_NAME: artifacts
 
 DATA:
-  ROOT_DIR: data
+  ROOT_DIR_NAME: data
 
   INGESTION:
-    ROOT_DIR: ingestion
-
+    ROOT_DIR_NAME: ingestion
     FEATURE_STORE:
-      ROOT_DIR: feature_store
+      ROOT_DIR_NAME: feature_store
       RAW_FILE_NAME: raw.csv
-
     INGESTED: 
-      ROOT_DIR: ingested
+      ROOT_DIR_NAME: ingested
       TRAIN_FILE_NAME: train.csv
       TEST_FILE_NAME: test.csv
     
+  VALIDATION:
+    ROOT_DIR_NAME: validation
+    VALID:
+      ROOT_DIR_NAME: valid
+      TRAIN_FILE_NAME: train.csv
+      TEST_FILE_NAME: test.csv
+    INVALID:
+      ROOT_DIR_NAME: invalid
+      TRAIN_FILE_NAME: train.csv
+      TEST_FILE_NAME: test.csv
+    DRIFT_REPORT:
+      ROOT_DIR_NAME: drift_report
+      FILE_NAME: report.yaml

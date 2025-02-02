@@ -20,3 +20,23 @@ class DataIngestionConfigEntity:
     COLLECTION_NAME:str
 
 
+@dataclass
+class DataValidationConfigEntity:
+    ARITFACTS_ROOT_DIR_PATH = Path
+    DATA_ROOT_DIR_PATH = Path
+    VALIDATION_ROOT_DIR_PATH = Path
+
+    VALID_ROOT_DIR_PATH = Path
+    VALID_TRAIN_FILE_PATH = str
+    VALID_TEST_FILE_PATH = str
+
+    INVALID_ROOT_DIR_PATH = Path
+    INVALID_TRAIN_FILE_PATH = str
+    INVALID_TEST_FILE_PATH = str
+
+    DRIFT_REPORT_ROOT_DIR_PATH = Path
+    DRIFT_REPORT_FILE_PATH = str
+
+    SCHEMA_FILE_PATH = Path
+
+

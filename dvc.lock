@@ -5,8 +5,8 @@ stages:
     deps:
     - path: config/config.yaml
       hash: md5
-      md5: e8b0282399add30635160e3ee2450aca
-      size: 296
+      md5: 4a4003eaf382399d56401e1cdad8da35
+      size: 665
     - path: src/package/pipeline/stage_01_data_ingestion.py
       hash: md5
       md5: 91c22cd75e2f11b65f6992bad28ac18b
@@ -16,4 +16,25 @@ stages:
       hash: md5
       md5: 7dfcbb8319e7e7d8657b38aeabb2bb52.dir
       size: 1600834
+      nfiles: 3
+  data_validation:
+    cmd: python src/package/pipeline/stage_02_data_validation.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 4a4003eaf382399d56401e1cdad8da35
+      size: 665
+    - path: schema/schema.yaml
+      hash: md5
+      md5: 7927c0e1ff8b2fa11648821ae1003c88
+      size: 1287
+    - path: src/package/pipeline/stage_02_data_validation.py
+      hash: md5
+      md5: 7fdcf3fb559958aa4d1b65ce80a77da0
+      size: 743
+    outs:
+    - path: artifacts/data/validation
+      hash: md5
+      md5: edc135144781442125f70f16b4593109.dir
+      size: 800679
       nfiles: 3

@@ -28,9 +28,22 @@ def read_yaml(path:str)->ConfigBox:
         ConfigBox: dict["key"] = value --------->  dict.key = value
     """
     try:
-        with open(path, "r") as yaml_file_obj:
+        with open(Path(path), "r") as yaml_file_obj:
             return ConfigBox(yaml.safe_load(yaml_file_obj))
     except Exception as e:
         raise CustomException(e, sys)
     
 
+def save_yaml(content:any, file_path:str)->None:
+    """saves the yaml file with provided content
+
+    Args:
+        content (any): content for the yaml file
+        path (str): path to save the file
+    """
+    try:
+        with open(Path(file_path), "w") as file:
+            yaml.safe_dump(content, file)
+    except Exception as e:
+        raise CustomException(e, sys)
+    

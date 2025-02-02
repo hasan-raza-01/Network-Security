@@ -6,3 +6,11 @@ stages:
       - config/config.yaml
     outs:
       - artifacts/data/ingestion
+  data_validation:
+    cmd: python src/package/pipeline/stage_02_data_validation.py
+    deps:
+      - src/package/pipeline/stage_02_data_validation.py
+      - config/config.yaml
+      - schema/schema.yaml
+    outs:
+      - artifacts/data/validation
