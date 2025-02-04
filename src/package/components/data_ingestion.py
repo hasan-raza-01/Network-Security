@@ -72,15 +72,15 @@ class DataIngestionComponents:
             logging.info(f"getting data from mongodb from DATABASE: {database_name} and COLLECTION: {collection_name}")
             # collection mongodb collection
             collection = client[database_name][collection_name]
-            logging.info("data collection completed")
 
             # converting mongodb collection into pandas dataframe
             self.data_frame = self.collection_to_dataframe(collection)
+            logging.info("data collection completed")
             
             # saving data into local file path
             file_path = self.data_ingestion_config.RAW_FILE_PATH
             self.data_frame.to_csv(file_path, index=False, header=True)
-            logging.info(f"Whole Data saved at {file_path}")
+            logging.info(f"Data saved at {file_path}")
 
             logging.info("Out collect_data")
         except Exception as e:

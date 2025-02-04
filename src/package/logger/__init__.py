@@ -2,6 +2,8 @@ import os
 import logging
 import datetime
 
+logging.getLogger("pymongo").setLevel(logging.CRITICAL)
+
 filename_format = datetime.datetime.now().strftime("%d_%m_%Y__%H_%M_%S")
 filename = f"{filename_format}.log"
 
