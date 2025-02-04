@@ -61,10 +61,10 @@ class DataValidationComponents:
                 schema["numerical_columns"] = numerical_columns
 
                 if schema==schema_org:
-                    status = True
+                    drift_status = False
                 else:
-                    status = False
-                output[data_type_name] = status   
+                    drift_status = True
+                output[data_type_name] = drift_status   
             final_output["result"] = output
             logging.info("data validation report successfully created")
 
@@ -115,7 +115,7 @@ class DataValidationComponents:
             # save validated data
             logging.info("validating data.....")
             for data_type_name, status in output["result"].items():
-                if status:
+                if not status:
                     path = valid_path_dict[data_type_name]
                 else:
                     path = invalid_path_dict[data_type_name]
@@ -124,7 +124,7 @@ class DataValidationComponents:
                     ingested_train_data.to_csv(path, index=False, header=True)
                 if data_type_name=="Test Data":
                     ingested_test_data.to_csv(path, index=False, header=True)
-                logging.info(f"validation status is {status}, saving {data_type_name} in {path}")
+                logging.info(f"drift status is {status}, saving {data_type_name} in {path}")
             logging.info("validation of data successfully completed.")
 
             logging.info("Out validate")
