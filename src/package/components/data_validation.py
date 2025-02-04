@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from package.entity import DataIngestionConfigEntity, DataValidationConfigEntity
 from package.exception import CustomException
+from package.logger import logging
 from package.utils import create_dirs, read_yaml, save_yaml
 from pathlib import Path
 import pandas as pd
@@ -32,9 +33,14 @@ class DataValidationComponents:
         Note: schema will be taken from Configuration
         """
         try:
+            logging.info("In get_report")
+
+            logging.info("getting schema of data from path")
             schema_org = read_yaml(schema_org_path)
+            logging.info("schema collection completed")
             data_dict = {"Train Data":train_data, "Test Data":test_data}
 
+            logging.info("creating data validation report.....")
             # verification
             schema = dict()
             columns_with_dtype = dict()
@@ -60,27 +66,39 @@ class DataValidationComponents:
                     status = False
                 output[data_type_name] = status   
             final_output["result"] = output
+            logging.info("data validation report successfully created")
+
+            logging.info("Out get_report")
             return final_output
         except Exception as e:
+            logging.exception(e)
             raise CustomException(e, sys)
         
     def validate(self)->None:
         """create required directories, saves validated data and report
         """
         try:
+            logging.info("In validate")
+
             # create required directories
+            logging.info("creating required dir's for for data validation")
             create_dirs(self.data_validation_config.ARITFACTS_ROOT_DIR_PATH)
             create_dirs(self.data_validation_config.DATA_ROOT_DIR_PATH)
             create_dirs(self.data_validation_config.VALIDATION_ROOT_DIR_PATH)
             create_dirs(self.data_validation_config.VALID_ROOT_DIR_PATH)
             create_dirs(self.data_validation_config.INVALID_ROOT_DIR_PATH)
             create_dirs(self.data_validation_config.DRIFT_REPORT_ROOT_DIR_PATH)
+            logging.info("directory creation completed")
 
-            # get required variables and data
-            schema_path = self.data_validation_config.SCHEMA_FILE_PATH
-            report_path = self.data_validation_config.DRIFT_REPORT_FILE_PATH
+            # collecting ingested data
+            logging.info("collecting ingested data")
             ingested_train_data = pd.read_csv(self.data_ingestion_config.TRAIN_FILE_PATH, index_col=False)
             ingested_test_data = pd.read_csv(self.data_ingestion_config.TEST_FILE_PATH, index_col=False)
+            logging.info("data collection completed")
+
+            # get required variables
+            schema_path = self.data_validation_config.SCHEMA_FILE_PATH
+            report_path = self.data_validation_config.DRIFT_REPORT_FILE_PATH
             output = self.get_report(ingested_train_data, ingested_test_data, schema_path)
 
             # get valid and invalid file path for train and test data
@@ -92,8 +110,10 @@ class DataValidationComponents:
             
             # save validation report
             save_yaml(output, report_path)
+            logging.info(f"validation report saved at {report_path}")
 
             # save validated data
+            logging.info("validating data.....")
             for data_type_name, status in output["result"].items():
                 if status:
                     path = valid_path_dict[data_type_name]
@@ -104,8 +124,12 @@ class DataValidationComponents:
                     ingested_train_data.to_csv(path, index=False, header=True)
                 if data_type_name=="Test Data":
                     ingested_test_data.to_csv(path, index=False, header=True)
+                logging.info(f"validation status is {status}, saving {data_type_name} in {path}")
+            logging.info("validation of data successfully completed.")
 
+            logging.info("Out validate")
         except Exception as e:
+            logging.exception(e)
             raise CustomException(e, sys)
         
 
