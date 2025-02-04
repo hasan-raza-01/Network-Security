@@ -1,6 +1,7 @@
 from package.utils import read_yaml
 from dataclasses import dataclass
 from pathlib import Path
+import numpy as np
 
 
 CONFIG = read_yaml("config/config.yaml")
@@ -41,5 +42,20 @@ class DataValidationConstants:
     DRIFT_REPORT_FILE_NAME = CONFIG.DATA.VALIDATION.DRIFT_REPORT.FILE_NAME
 
     SCHEMA_FILE_PATH = Path("schema/schema.yaml")
+
+
+@dataclass
+class DataTransformationConstants:
+    ARITFACTS_ROOT_DIR_NAME = CONFIG.ARITFACTS_ROOT_DIR_NAME
+    DATA_ROOT_DIR_NAME = CONFIG.DATA.ROOT_DIR_NAME
+    TRANSFORMATION_ROOT_DIR_NAME = CONFIG.DATA.TRANSFORMATION.ROOT_DIR_NAME
+    PREPROCESSOR_NAME = CONFIG.DATA.TRANSFORMATION.PREPROCESSOR_NAME
+    TRAIN_FILE_NAME = CONFIG.DATA.TRANSFORMATION.TRAIN_FILE_NAME
+    TEST_FILE_NAME = CONFIG.DATA.TRANSFORMATION.TEST_FILE_NAME
+    TARGET_COLUMN_NAME = "Result"
+    PREPROCESSOR_PARAMS = dict(
+        missing_values = np.nan,
+        strategy = "most_frequent"
+    )
 
 

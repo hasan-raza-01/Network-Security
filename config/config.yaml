@@ -26,3 +26,10 @@ DATA:
     DRIFT_REPORT:
       ROOT_DIR_NAME: drift_report
       FILE_NAME: report.yaml
+
+  TRANSFORMATION:
+    ROOT_DIR_NAME: transformation
+    PREPROCESSOR_NAME: preprocessor.h5
+    TRAIN_FILE_NAME: train.npy
+    TEST_FILE_NAME: test.npy
+    

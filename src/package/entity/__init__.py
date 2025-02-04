@@ -40,3 +40,15 @@ class DataValidationConfigEntity:
     SCHEMA_FILE_PATH = Path
 
 
+@dataclass
+class DataTransformationConfigEntity:
+    ARITFACTS_ROOT_DIR_PATH: Path
+    DATA_ROOT_DIR_PATH: Path
+    TRANSFORMATION_ROOT_DIR_PATH: Path
+    PREPROCESSOR_PATH: Path
+    TRAIN_FILE_PATH: Path
+    TEST_FILE_PATH: Path
+    TARGET_COLUMN_NAME: str
+    PREPROCESSOR_PARAMS: dict
+
+

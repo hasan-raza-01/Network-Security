@@ -10,7 +10,20 @@ stages:
     cmd: python src/package/pipeline/stage_02_data_validation.py
     deps:
       - src/package/pipeline/stage_02_data_validation.py
+      - artifacts\data\ingestion\ingested\train.csv
+      - artifacts\data\ingestion\ingested\test.csv
       - config/config.yaml
       - schema/schema.yaml
     outs:
       - artifacts/data/validation
+  data_transformation:
+    cmd: python src/package/pipeline/stage_03_data_transformation.py
+    deps:
+      - src/package/pipeline/stage_03_data_transformation.py
+      - artifacts/data/validation/drift_report/report.yaml
+      - artifacts\data\validation\valid\train.csv
+      - artifacts\data\validation\valid\test.csv
+      - config/config.yaml
+    outs:
+      - artifacts/data/transformation
+

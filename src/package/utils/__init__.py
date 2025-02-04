@@ -1,9 +1,10 @@
 from package.exception import CustomException
+from box import ConfigBox
+from pathlib import Path
 import sys
 import os
 import yaml
-from box import ConfigBox
-from pathlib import Path
+import pickle
 
 
 def create_dirs(path:str)->None:
@@ -44,6 +45,33 @@ def save_yaml(content:any, file_path:str)->None:
     try:
         with open(Path(file_path), "w") as file:
             yaml.safe_dump(content, file)
+    except Exception as e:
+        raise CustomException(e, sys)
+    
+
+def save_obj(obj:any, path:str)->None:
+    """saves the object on given path
+
+    Args:
+        obj (any): object to dump
+        path (str): path to dump the object
+    """
+    try:
+        with open(Path(path), "wb") as file:
+            pickle.dump(obj, file)
+    except Exception as e:
+        raise CustomException(e, sys)
+    
+
+def load_obj(path:str):
+    """load the object available in path
+
+    Args:
+        path (str): path of the object
+    """
+    try:
+        with open(Path(path), "rb") as file:
+            return pickle.load(file)
     except Exception as e:
         raise CustomException(e, sys)
     

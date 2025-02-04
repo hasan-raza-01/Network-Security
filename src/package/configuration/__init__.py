@@ -1,7 +1,11 @@
 from dataclasses import dataclass
-from package.constants import DataIngestionConstants, DataValidationConstants
 from pathlib import Path
 import os
+from package.constants import (
+    DataIngestionConstants, 
+    DataValidationConstants, 
+    DataTransformationConstants
+)
 
 
 @dataclass
@@ -40,5 +44,17 @@ class DataValidationConfig:
     DRIFT_REPORT_FILE_PATH = os.path.join(DRIFT_REPORT_ROOT_DIR_PATH, DataValidationConstants.DRIFT_REPORT_FILE_NAME)
 
     SCHEMA_FILE_PATH = DataValidationConstants.SCHEMA_FILE_PATH
+
+
+@dataclass
+class DataTransformationConfig:
+    ARITFACTS_ROOT_DIR_PATH =  Path(DataTransformationConstants.ARITFACTS_ROOT_DIR_NAME)
+    DATA_ROOT_DIR_PATH =  os.path.join(ARITFACTS_ROOT_DIR_PATH, DataTransformationConstants.DATA_ROOT_DIR_NAME)
+    TRANSFORMATION_ROOT_DIR_PATH =  os.path.join(DATA_ROOT_DIR_PATH, DataTransformationConstants.TRANSFORMATION_ROOT_DIR_NAME)
+    PREPROCESSOR_PATH =  os.path.join(TRANSFORMATION_ROOT_DIR_PATH, DataTransformationConstants.PREPROCESSOR_NAME)
+    TRAIN_FILE_PATH =  os.path.join(TRANSFORMATION_ROOT_DIR_PATH, DataTransformationConstants.TRAIN_FILE_NAME)
+    TEST_FILE_PATH =  os.path.join(TRANSFORMATION_ROOT_DIR_PATH, DataTransformationConstants.TEST_FILE_NAME)
+    TARGET_COLUMN_NAME =  DataTransformationConstants.TARGET_COLUMN_NAME
+    PREPROCESSOR_PARAMS =  DataTransformationConstants.PREPROCESSOR_PARAMS
 
 
