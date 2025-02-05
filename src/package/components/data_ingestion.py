@@ -28,10 +28,9 @@ class DataIngestionComponents:
         try:
             logging.info("In collection_to_dataframe")
 
-            logging.info("data conversion (mongodb collection ===> pandas DataFrame) started....")
             # collection mongodb collection 
             df = pd.DataFrame(collection.find())
-            logging.info("data successfully converted")
+            logging.info("data successfully converted (mongodb collection ===> pandas DataFrame)")
 
             # converting mongodb collection into pandas dataframe
             df = df.drop("_id", axis=1)
@@ -49,33 +48,30 @@ class DataIngestionComponents:
             logging.info("In collect_data")
 
             # creating required directories
-            logging.info("creating required dir's for for data ingestion")
             create_dirs(self.data_ingestion_config.ARITFACTS_ROOT_DIR_PATH)
             create_dirs(self.data_ingestion_config.DATA_ROOT_DIR_PATH)
             create_dirs(self.data_ingestion_config.INGESTION_ROOT_DIR_PATH)
             create_dirs(self.data_ingestion_config.FEATURE_STORE_ROOT_DIR_PATH)
             create_dirs(self.data_ingestion_config.INGESTED_ROOT_DIR_PATH)
-            logging.info("directory creation completed")
+            logging.info("Required dir's creation completed")
 
             # loading vulnarable variables
             load_dotenv()
             URI = os.getenv("URI")
             
-            logging.info("connecting to mongodb")
             # connecting to mongodb
             client = MongoClient(URI)
-            logging.info("connection successful")
+            logging.info("connected tot mongodb")
             
             database_name = self.data_ingestion_config.DATABASE_NAME
             collection_name = self.data_ingestion_config.COLLECTION_NAME
             
-            logging.info(f"getting data from mongodb from DATABASE: {database_name} and COLLECTION: {collection_name}")
             # collection mongodb collection
             collection = client[database_name][collection_name]
 
             # converting mongodb collection into pandas dataframe
             self.data_frame = self.collection_to_dataframe(collection)
-            logging.info("data collection completed")
+            logging.info(f"collected data from mongodb DATABASE: {database_name} and COLLECTION: {collection_name}")
             
             # saving data into local file path
             file_path = self.data_ingestion_config.RAW_FILE_PATH
@@ -95,10 +91,9 @@ class DataIngestionComponents:
 
             split_ratio = self.data_ingestion_config.SPLIT_RATIO
 
-            logging.info("spliting data")
             # getting train and test data according to split ratio
             train_data, test_data = train_test_split(self.data_frame, test_size=split_ratio, random_state=42)
-            logging.info("spliting completed")
+            logging.info("data spliting completed")
 
             # saving train data into local file path
             train_file_path = self.data_ingestion_config.TRAIN_FILE_PATH
