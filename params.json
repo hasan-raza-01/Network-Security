@@ -1,0 +1,30 @@
+{
+    "Decision Tree": {
+        "criterion":["gini"],
+        "splitter":["best"],
+        "max_features":["sqrt"]
+    },
+    "Random Forest":{
+        "criterion":["gini"],
+        
+        "max_features":["sqrt"],
+        "n_estimators": [8]
+    },
+    "Gradient Boosting":{
+        "loss":["log_loss"],
+        "learning_rate":[0.001],
+        "subsample":[0.6],
+        "criterion":["squared_error"],
+        "max_features":["auto"],
+        "n_estimators": [8]
+    },
+    "Logistic Regression":{
+        
+    },
+    "AdaBoost":{
+        "learning_rate":[0.1],
+        "n_estimators": [8]
+    }
+    
+}
+

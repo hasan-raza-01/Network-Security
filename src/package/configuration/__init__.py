@@ -4,7 +4,8 @@ import os
 from package.constants import (
     DataIngestionConstants, 
     DataValidationConstants, 
-    DataTransformationConstants
+    DataTransformationConstants,
+    ModelTrainerConstants
 )
 
 
@@ -56,5 +57,18 @@ class DataTransformationConfig:
     TEST_FILE_PATH =  os.path.join(TRANSFORMATION_ROOT_DIR_PATH, DataTransformationConstants.TEST_FILE_NAME)
     TARGET_COLUMN_NAME =  DataTransformationConstants.TARGET_COLUMN_NAME
     PREPROCESSOR_PARAMS =  DataTransformationConstants.PREPROCESSOR_PARAMS
+
+
+@dataclass
+class ModelTrainerConfig:
+    ARITFACTS_ROOT_DIR_PATH = Path(ModelTrainerConstants.ARITFACTS_ROOT_DIR_NAME)
+    MODEL_ROOT_DIR_PATH =  os.path.join(ARITFACTS_ROOT_DIR_PATH, ModelTrainerConstants.MODEL_ROOT_DIR_NAME)
+    EVALUATION_FILE_PATH = os.path.join(MODEL_ROOT_DIR_PATH, ModelTrainerConstants.EVALUATION_FILE_NAME)
+
+    ESTIMATOR_ROOT_DIR_PATH =  os.path.join(MODEL_ROOT_DIR_PATH, ModelTrainerConstants.ESTIMATOR_ROOT_DIR_NAME)
+    ESTIMATOR_FILE_PATH =  os.path.join(ESTIMATOR_ROOT_DIR_PATH, ModelTrainerConstants.ESTIMATOR_FILE_NAME)
+    CONFIG_FILE_PATH =  os.path.join(ESTIMATOR_ROOT_DIR_PATH, ModelTrainerConstants.CONFIG_FILE_NAME)
+
+    PARAMS_FILE_PATH = ModelTrainerConstants.PARAMS_FILE_NAME
 
 

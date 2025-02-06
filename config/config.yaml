@@ -33,3 +33,12 @@ DATA:
     TRAIN_FILE_NAME: train.npy
     TEST_FILE_NAME: test.npy
     
+MODEL:
+  ROOT_DIR_NAME: model
+  EVALUATION_FILE_NAME: eval_report.json
+  ESTIMATOR:
+    ROOT_DIR_NAME: estimator
+    ESTIMATOR_FILE_NAME: model.h5
+    CONFIG_FILE_NAME: config.json
+
+

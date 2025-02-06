@@ -7,3 +7,4 @@ python-box
 ipykernel
 pymongo
 scikit-learn
+retrying

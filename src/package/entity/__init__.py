@@ -52,3 +52,16 @@ class DataTransformationConfigEntity:
     PREPROCESSOR_PARAMS: dict
 
 
+@dataclass
+class ModelTrainerConfigEntity:
+    ARITFACTS_ROOT_DIR_PATH: Path
+    MODEL_ROOT_DIR_PATH: Path
+    EVALUATION_FILE_PATH: Path
+
+    ESTIMATOR_ROOT_DIR_PATH: Path
+    ESTIMATOR_FILE_PATH: Path
+    CONFIG_FILE_PATH: Path
+
+    PARAMS_FILE_PATH: Path
+
+

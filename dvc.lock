@@ -5,8 +5,8 @@ stages:
     deps:
     - path: config/config.yaml
       hash: md5
-      md5: 5d6aa18f05095c8f53db64bc4c71fa90
-      size: 829
+      md5: d0c2c3ba58c81d5efe0f75058d6e5c57
+      size: 1021
     - path: src/package/pipeline/stage_01_data_ingestion.py
       hash: md5
       md5: c8e5f01e6901e35c6d930619f8585828
@@ -30,8 +30,8 @@ stages:
       size: 640248
     - path: config/config.yaml
       hash: md5
-      md5: 5d6aa18f05095c8f53db64bc4c71fa90
-      size: 829
+      md5: d0c2c3ba58c81d5efe0f75058d6e5c57
+      size: 1021
     - path: schema/schema.yaml
       hash: md5
       md5: 7927c0e1ff8b2fa11648821ae1003c88
@@ -63,15 +63,44 @@ stages:
       size: 640248
     - path: config/config.yaml
       hash: md5
-      md5: 5d6aa18f05095c8f53db64bc4c71fa90
-      size: 829
+      md5: d0c2c3ba58c81d5efe0f75058d6e5c57
+      size: 1021
     - path: src/package/pipeline/stage_03_data_transformation.py
       hash: md5
-      md5: e4bc2c324d0896580a594b167a30e89d
-      size: 800
+      md5: d30115ee72887a850235888b143c724f
+      size: 976
     outs:
     - path: artifacts/data/transformation
       hash: md5
       md5: 36c469baf243a8815f1bd4c80e9288df.dir
       size: 2742206
+      nfiles: 3
+  model_training:
+    cmd: python src\package\pipeline\stage_04_model_trainer.py
+    deps:
+    - path: artifacts\data\transformation\preprocessor.h5
+      hash: md5
+      md5: 4203420f2c8fa3d0dfed45c3c1abf7cc
+      size: 310
+    - path: artifacts\data\transformation\test.npy
+      hash: md5
+      md5: c495d06d79053521fe32e5603b487f00
+      size: 548456
+    - path: artifacts\data\transformation\train.npy
+      hash: md5
+      md5: b432762e9f7b9dc1f4a89e8d2ba07daf
+      size: 2193440
+    - path: config/config.yaml
+      hash: md5
+      md5: d0c2c3ba58c81d5efe0f75058d6e5c57
+      size: 1021
+    - path: src\package\pipeline\stage_04_model_trainer.py
+      hash: md5
+      md5: 8d0670153d1edf9a4a0f76f0795903ef
+      size: 722
+    outs:
+    - path: artifacts\model
+      hash: md5
+      md5: 28c8300e137cc9a67a696bfc1e290b49.dir
+      size: 10542117
       nfiles: 3
