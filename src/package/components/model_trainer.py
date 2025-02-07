@@ -94,7 +94,7 @@ class ModelTrainerComponents:
                 # save model
                 model_file_path = self.model_trainer_config.ESTIMATOR_FILE_PATH
                 save_obj(model, model_file_path)
-                logging.info(f"Estimator \'{str(model)}\' saved at {model_file_path}")
+                logging.info(f"Estimator saved at {model_file_path}")
 
                 # model prediction
                 train_y_pred = model.predict(X_train)
@@ -102,13 +102,13 @@ class ModelTrainerComponents:
 
                 # get evaluation score
                 model_scores = get_performance_report(y_train, y_test, train_y_pred, test_y_pred)
-                logging.info(f"\'{str(model)}\' scores: {model_scores}")
+                logging.info(f"Estimator scores: {model_scores}")
 
                 # create and save model config report
                 model_config = {"Estimator":str(model), "scores":model_scores, "params":best_params}
                 config_file_path = self.model_trainer_config.CONFIG_FILE_PATH
                 save_json(model_config, config_file_path)
-                logging.info(f"Estimator \'{str(model)}\' configuration file saved at {config_file_path}")
+                logging.info(f"Estimator configurations saved at {config_file_path}")
 
                 # log parameters
                 mlflow.log_params(best_params)
