@@ -94,6 +94,10 @@ stages:
       hash: md5
       md5: d0c2c3ba58c81d5efe0f75058d6e5c57
       size: 1021
+    - path: params.json
+      hash: md5
+      md5: cb613b862b50fa77a81b70673f23f2f5
+      size: 860
     - path: src\package\pipeline\stage_04_model_trainer.py
       hash: md5
       md5: 8d0670153d1edf9a4a0f76f0795903ef
@@ -101,6 +105,6 @@ stages:
     outs:
     - path: artifacts\model
       hash: md5
-      md5: 28c8300e137cc9a67a696bfc1e290b49.dir
-      size: 10542117
+      md5: b5e2d78dd335c087f03365e915e9726c.dir
+      size: 29180754
       nfiles: 3
