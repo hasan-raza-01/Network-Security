@@ -147,7 +147,7 @@ def evaluate_models(X_train:np.array, y_train:np.array, X_test:np.array, y_test:
             grid.fit(X_train, y_train)
 
             # fit best params
-            model.set_params(**grid.params_)
+            model.set_params(**grid.best_params_)
             model.fit(X_train, y_train)
 
             # predict test data 
@@ -156,7 +156,7 @@ def evaluate_models(X_train:np.array, y_train:np.array, X_test:np.array, y_test:
             # model test data performance score calculation
             score = accuracy_score(y_test, test_y_pred)
 
-            report[model_name] = {f"score":score, f"params":grid.params_}
+            report[model_name] = {f"score":score, f"params":grid.best_params_}
 
         return report
     except Exception as e:

@@ -1,29 +1,29 @@
 {
     "Decision Tree": {
-        "criterion":["gini"],
-        "splitter":["best"],
-        "max_features":["sqrt"]
+        "criterion":["gini", "entropy", "log_loss"],
+        "splitter":["best","random"],
+        "max_features":["sqrt","log2"]
     },
     "Random Forest":{
-        "criterion":["gini"],
+        "criterion":["gini", "entropy", "log_loss"],
         
-        "max_features":["sqrt"],
-        "n_estimators": [8]
+        "max_features":["sqrt","log2", null],
+        "n_estimators": [8,16,32,128,256]
     },
     "Gradient Boosting":{
-        "loss":["log_loss"],
-        "learning_rate":[0.001],
-        "subsample":[0.6],
-        "criterion":["squared_error"],
-        "max_features":["auto"],
-        "n_estimators": [8]
+        "loss":["log_loss", "exponential"],
+        "learning_rate":[0.1,0.01,0.05,0.001],
+        "subsample":[0.6,0.7,0.75,0.85,0.9],
+        "criterion":["squared_error", "friedman_mse"],
+        "max_features":["sqrt","log2", 0.1, 0.01, 0.001],
+        "n_estimators": [8,16,32,64,128,256]
     },
     "Logistic Regression":{
         
     },
     "AdaBoost":{
-        "learning_rate":[0.1],
-        "n_estimators": [8]
+        "learning_rate":[0.1,0.01,0.001],
+        "n_estimators": [8,16,32,64,128,256]
     }
     
 }

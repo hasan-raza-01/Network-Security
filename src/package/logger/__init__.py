@@ -14,7 +14,7 @@ os.makedirs(folder_name, exist_ok=True)
 filepath = os.path.join(folder_name, filename)
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     filename=filepath,
     filemode="a",
     format="[%(asctime)s] - %(name)s - %(levelname)s - %(pathname)s - %(filename)s - %(lineno)s - %(message)s",
