@@ -5,6 +5,7 @@ from package.pipeline import (
     stage_04_model_trainer
 )
 from dataclasses import dataclass
+from package.cloud import push_to_cloud
 
 
 @dataclass
@@ -19,5 +20,7 @@ class TrainingPipeline:
         self.stage_02.main()
         self.stage_03.main()
         self.stage_04.main()
-
+        
+        # push artifacts to cloud
+        push_to_cloud()
 

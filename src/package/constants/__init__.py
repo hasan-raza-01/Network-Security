@@ -1,12 +1,10 @@
 from package.utils import read_yaml
 from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
 import numpy as np
 
 
 CONFIG = read_yaml("config/config.yaml")
-timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
 @dataclass
 class DataIngestionConstants:
