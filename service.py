@@ -6,8 +6,6 @@ from package.configuration import DataTransformationConfig, ModelTrainerConfig
 from package.utils import load_obj, load_json
 
 
-# Initialize Dagshub
-dagshub.init(repo_owner='hasan-raza-01', repo_name='Network-Security', mlflow=True)
 
 @bentoml.service
 class NetworkSecurity:
@@ -22,6 +20,8 @@ class NetworkSecurity:
     @bentoml.api
     def predict(self, input_data:Numpy.ndarray)->list:
         try:
+            # Initialize Dagshub
+            dagshub.init(repo_owner='hasan-raza-01', repo_name='Network-Security', mlflow=True)
 
             # # load model from mlflow
             model_name = load_json(ModelTrainerConfig.CONFIG_FILE_PATH)["model"]
