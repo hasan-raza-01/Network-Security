@@ -41,4 +41,6 @@ MODEL:
     ESTIMATOR_FILE_NAME: model.h5
     CONFIG_FILE_NAME: config.json
 
-
+PREDICTION:
+  ROOT_DIR_NAME: prediction
+  OUTPUT_FILE_NAME: output.json

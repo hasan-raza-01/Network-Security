@@ -143,7 +143,7 @@ def evaluate_models(X_train:np.array, y_train:np.array, X_test:np.array, y_test:
             param = params[model_name]
 
             # hyper parameter tuning
-            grid = GridSearchCV(model, param)
+            grid = GridSearchCV(model, param, n_jobs=-1)
             grid.fit(X_train, y_train)
 
             # fit best params

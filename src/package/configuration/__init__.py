@@ -1,17 +1,12 @@
 from dataclasses import dataclass
-from pathlib import Path
+from package.constants import *
 import os
-from package.constants import (
-    DataIngestionConstants, 
-    DataValidationConstants, 
-    DataTransformationConstants,
-    ModelTrainerConstants
-)
+
 
 
 @dataclass
 class DataIngestionConfig:
-    ARITFACTS_ROOT_DIR_PATH = DataIngestionConstants.ARITFACTS_ROOT_DIR_NAME
+    ARITFACTS_ROOT_DIR_PATH = os.path.join(DataIngestionConstants.ARITFACTS_ROOT_DIR_NAME, timestamp)
     DATA_ROOT_DIR_PATH = os.path.join(ARITFACTS_ROOT_DIR_PATH, DataIngestionConstants.DATA_ROOT_DIR_NAME)
     INGESTION_ROOT_DIR_PATH = os.path.join(DATA_ROOT_DIR_PATH, DataIngestionConstants.INGESTION_ROOT_DIR_NAME)
 
@@ -29,7 +24,7 @@ class DataIngestionConfig:
 
 @dataclass
 class DataValidationConfig:
-    ARITFACTS_ROOT_DIR_PATH = Path(DataValidationConstants.ARITFACTS_ROOT_DIR_NAME)
+    ARITFACTS_ROOT_DIR_PATH = os.path.join(DataValidationConstants.ARITFACTS_ROOT_DIR_NAME, timestamp)
     DATA_ROOT_DIR_PATH = os.path.join(ARITFACTS_ROOT_DIR_PATH, DataValidationConstants.DATA_ROOT_DIR_NAME)
     VALIDATION_ROOT_DIR_PATH = os.path.join(DATA_ROOT_DIR_PATH, DataValidationConstants.VALIDATION_ROOT_DIR_NAME)
 
@@ -49,7 +44,7 @@ class DataValidationConfig:
 
 @dataclass
 class DataTransformationConfig:
-    ARITFACTS_ROOT_DIR_PATH =  Path(DataTransformationConstants.ARITFACTS_ROOT_DIR_NAME)
+    ARITFACTS_ROOT_DIR_PATH =  os.path.join(DataTransformationConstants.ARITFACTS_ROOT_DIR_NAME, timestamp)
     DATA_ROOT_DIR_PATH =  os.path.join(ARITFACTS_ROOT_DIR_PATH, DataTransformationConstants.DATA_ROOT_DIR_NAME)
     TRANSFORMATION_ROOT_DIR_PATH =  os.path.join(DATA_ROOT_DIR_PATH, DataTransformationConstants.TRANSFORMATION_ROOT_DIR_NAME)
     PREPROCESSOR_PATH =  os.path.join(TRANSFORMATION_ROOT_DIR_PATH, DataTransformationConstants.PREPROCESSOR_NAME)
@@ -61,7 +56,7 @@ class DataTransformationConfig:
 
 @dataclass
 class ModelTrainerConfig:
-    ARITFACTS_ROOT_DIR_PATH = Path(ModelTrainerConstants.ARITFACTS_ROOT_DIR_NAME)
+    ARITFACTS_ROOT_DIR_PATH = os.path.join(ModelTrainerConstants.ARITFACTS_ROOT_DIR_NAME, timestamp)
     MODEL_ROOT_DIR_PATH =  os.path.join(ARITFACTS_ROOT_DIR_PATH, ModelTrainerConstants.MODEL_ROOT_DIR_NAME)
     EVALUATION_FILE_PATH = os.path.join(MODEL_ROOT_DIR_PATH, ModelTrainerConstants.EVALUATION_FILE_NAME)
 
@@ -70,5 +65,12 @@ class ModelTrainerConfig:
     CONFIG_FILE_PATH =  os.path.join(ESTIMATOR_ROOT_DIR_PATH, ModelTrainerConstants.CONFIG_FILE_NAME)
 
     PARAMS_FILE_PATH = ModelTrainerConstants.PARAMS_FILE_NAME
+
+
+@dataclass
+class PredictionConfig:
+    ARITFACTS_ROOT_DIR_PATH = os.path.join(PredictionConstants.ARITFACTS_ROOT_DIR_NAME, timestamp)
+    PREDICTION_ROOT_DIR_PATH = os.path.join(ARITFACTS_ROOT_DIR_PATH, PredictionConstants.PREDICTION_ROOT_DIR_NAME)
+    OUTPUT_FILE_PATH = os.path.join(PREDICTION_ROOT_DIR_PATH, f"{timestamp}_{PredictionConstants.OUTPUT_FILE_NAME}")
 
 

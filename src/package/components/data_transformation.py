@@ -60,15 +60,15 @@ class DataTransformationComponents:
             preprocessor = self.get_preprocessor()
             logging.info("preprocessor collected")
 
-            # save preprocessor
-            preprocessor_path = self.data_transformation_config.PREPROCESSOR_PATH
-            save_obj(preprocessor, preprocessor_path)
-            logging.info(f"preprocessor object saved at {preprocessor_path}")
-
             # transform data input features
             transformed_X_train = preprocessor.fit_transform(X_train)
             transformed_X_test = preprocessor.transform(X_test)
             logging.info("input features transformation completed")
+
+            # save preprocessor
+            preprocessor_path = self.data_transformation_config.PREPROCESSOR_PATH
+            save_obj(preprocessor, preprocessor_path)
+            logging.info(f"preprocessor object saved at {preprocessor_path}")
 
             # concatination of input and output features
             preprocessed_train_data = np.c_[transformed_X_train, np.array(y_train)]

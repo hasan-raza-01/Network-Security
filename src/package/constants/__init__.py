@@ -1,10 +1,12 @@
 from package.utils import read_yaml
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 import numpy as np
 
 
 CONFIG = read_yaml("config/config.yaml")
+timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
 @dataclass
 class DataIngestionConstants:
@@ -70,5 +72,12 @@ class ModelTrainerConstants:
     CONFIG_FILE_NAME = CONFIG.MODEL.ESTIMATOR.CONFIG_FILE_NAME
 
     PARAMS_FILE_NAME = "params.json"
+
+
+@dataclass
+class PredictionConstants:
+    ARITFACTS_ROOT_DIR_NAME = CONFIG.ARITFACTS_ROOT_DIR_NAME
+    PREDICTION_ROOT_DIR_NAME = CONFIG.PREDICTION.ROOT_DIR_NAME
+    OUTPUT_FILE_NAME = CONFIG.PREDICTION.OUTPUT_FILE_NAME
 
 

@@ -65,3 +65,10 @@ class ModelTrainerConfigEntity:
     PARAMS_FILE_PATH: Path
 
 
+@dataclass
+class PredictionConfigEntity:
+    ARITFACTS_ROOT_DIR_PATH = Path
+    PREDICTION_ROOT_DIR_PATH = Path
+    OUTPUT_FILE_PATH = Path
+
+

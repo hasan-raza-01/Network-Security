@@ -178,3 +178,4 @@ notebook
 logs
 artifacts
 *.egg-info
+mlruns

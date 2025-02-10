@@ -35,11 +35,11 @@ class ModelTrainerComponents:
 
             # models list
             models = {
-                    "Random Forest": RandomForestClassifier(verbose=1),
-                    "Decision Tree": DecisionTreeClassifier(),
-                    "Gradient Boosting": GradientBoostingClassifier(verbose=1),
-                    "Logistic Regression": LogisticRegression(verbose=1),
-                    "AdaBoost": AdaBoostClassifier(),
+                    "RandomForestClassifier": RandomForestClassifier(verbose=1),
+                    "DecisionTreeClassifier": DecisionTreeClassifier(),
+                    "GradientBoostingClassifier": GradientBoostingClassifier(verbose=1),
+                    "LogisticRegression": LogisticRegression(verbose=1),
+                    "AdaBoostClassifier": AdaBoostClassifier(),
                 }
             
             # collect params
@@ -94,7 +94,7 @@ class ModelTrainerComponents:
                 # save model
                 model_file_path = self.model_trainer_config.ESTIMATOR_FILE_PATH
                 save_obj(model, model_file_path)
-                logging.info(f"Estimator saved at {model_file_path}")
+                logging.info(f"model {best_model_name} saved at {model_file_path}")
 
                 # model prediction
                 train_y_pred = model.predict(X_train)
@@ -102,13 +102,13 @@ class ModelTrainerComponents:
 
                 # get evaluation score
                 model_scores = get_performance_report(y_train, y_test, train_y_pred, test_y_pred)
-                logging.info(f"Estimator scores: {model_scores}")
+                logging.info(f"model scores: {model_scores}")
 
                 # create and save model config report
-                model_config = {"Estimator":str(model), "scores":model_scores, "params":best_params}
+                model_config = {"model":best_model_name, "scores":model_scores, "params":best_params}
                 config_file_path = self.model_trainer_config.CONFIG_FILE_PATH
                 save_json(model_config, config_file_path)
-                logging.info(f"Estimator configurations saved at {config_file_path}")
+                logging.info(f"model {best_model_name} configurations saved at {config_file_path}")
 
                 # log parameters
                 mlflow.log_params(best_params)
@@ -126,19 +126,15 @@ class ModelTrainerComponents:
                 tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
 
                 if tracking_url_type_store != "file":
-                    mlflow.sklearn.log_model(model, "RandomForestClassifier",
-                                            registered_model_name="RandomForestClassifier", 
+                    mlflow.sklearn.log_model(model, best_model_name,
+                                            registered_model_name=best_model_name, 
                                             signature=infer_signature
                                     )
                 else:
-                    mlflow.sklearn.log_model(model, "RandomForestClassifier",
+                    mlflow.sklearn.log_model(model, best_model_name,
                                             signature=infer_signature
                                     )
             logging.info("mlflow tracking and logging successful")
-
-            # saving model locally
-            bentoml.sklearn.save_model("RandomForestClassifier", model)
-            logging.info("model also saved in bentoml local store")
 
             logging.info("Out initiate_training")
         except Exception as e:
