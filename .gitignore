@@ -179,4 +179,3 @@ logs
 artifacts
 *.egg-info
 mlruns
-gcp_client_secrets.json

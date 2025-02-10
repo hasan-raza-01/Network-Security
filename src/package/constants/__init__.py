@@ -79,3 +79,10 @@ class PredictionConstants:
     OUTPUT_FILE_NAME = CONFIG.PREDICTION.OUTPUT_FILE_NAME
 
 
+@dataclass
+class TrainingPipelineConstants:
+    AWS_BUCKET_NAME = "admintestnetworksecurity"
+    AWS_BUCKET_FOLDER_NAME = "non-dvcstore"
+    LOCAL_FOLDER_NAME = "artifacts"
+
+
