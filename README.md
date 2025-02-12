@@ -14,11 +14,11 @@
 9. Update the dvc.yaml
 
 # Setup github secrets:
-1. AWS_ACCESS_KEY_ID=
-2. AWS_SECRET_ACCESS_KEY=
-3. AWS_REGION = us-east-1
-4. AWS_ECR_LOGIN_URI = 788614365622.dkr.ecr.us-east-1.amazonaws.com/networkssecurity
-5. ECR_REPOSITORY_NAME = networkssecurity
+1. AWS_ACCESS_KEY_ID
+2. AWS_SECRET_ACCESS_KEY
+3. AWS_REGION
+4. AWS_ECR_LOGIN_URI
+5. ECR_REPOSITORY_NAME
 
 
 # Amazon linux 2023
