@@ -1,0 +1,12 @@
+template.py
+venv
+__pycache__
+.env
+notebook
+logs
+artifacts
+*.egg-info
+mlruns
+bentofile.yaml
+.bentoignore
+service.py
