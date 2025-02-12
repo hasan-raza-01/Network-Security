@@ -31,6 +31,8 @@ cat /etc/os-release
 
 ```
 sudo dnf update -y
+```
+```
 sudo dnf upgrade
 ```
 
@@ -38,9 +40,17 @@ sudo dnf upgrade
 
 ```
 sudo dnf install docker -y
+```
+```
 sudo systemctl start docker
+```
+```
 sudo systemctl enable docker
+```
+```
 sudo usermod -aG docker ec2-user
+```
+```
 newgrp docker
 ```
 
