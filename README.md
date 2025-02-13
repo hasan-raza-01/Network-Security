@@ -64,3 +64,8 @@ sudo dnf install perl-Digest-SHA -y
 sudo dnf install -y libicu
 ```
 
+### solution: "missing Dotnet Core 6.0 dependencies"
+```
+sudo dnf install -y dotnet-sdk-6.0
+```
+
