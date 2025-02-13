@@ -133,9 +133,8 @@ def evaluate_models(X_train:np.array, y_train:np.array, X_test:np.array, y_test:
             key=model_score (type=int) 
            value=dict(
                     key=model_name (type=str) 
-                   value=model_params (type=dict) 
-                )
-        )
+                   value=model_params (type=dict) )
+    )
     """
     try:
         report = dict()

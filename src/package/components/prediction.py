@@ -3,6 +3,7 @@ from package.exception import CustomException
 from package.utils import create_dirs, save_json
 from package.entity import PredictionConfigEntity
 from package.logger import logging
+from datetime import datetime
 import sys
 
 
@@ -38,7 +39,8 @@ class PredictionComponents:
             logging.info("Data transformed and predicted")
 
             # save prediction
-            prediction_file_path =self.prediction_config.OUTPUT_FILE_PATH
+            timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+            prediction_file_path =f"{"\\".join(self.prediction_config.OUTPUT_FILE_PATH.split("\\")[:-1])}\\{timestamp}_{self.prediction_config.OUTPUT_FILE_PATH.split("\\")[-1]}"
             model_prediction_file_content = {"input":data.tolist(), "pred":prediction}
             save_json(model_prediction_file_content, prediction_file_path)
             logging.info(f"Prediction saved at {prediction_file_path}")

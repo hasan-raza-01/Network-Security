@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from pathlib import Path
-from datetime import datetime
 import os
 from package.constants import (
     DataIngestionConstants, 
@@ -76,9 +75,8 @@ class ModelTrainerConfig:
 
 @dataclass
 class PredictionConfig:
-    timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
     ARITFACTS_ROOT_DIR_PATH = Path(PredictionConstants.ARITFACTS_ROOT_DIR_NAME)
     PREDICTION_ROOT_DIR_PATH = os.path.join(ARITFACTS_ROOT_DIR_PATH, PredictionConstants.PREDICTION_ROOT_DIR_NAME)
-    OUTPUT_FILE_PATH = os.path.join(PREDICTION_ROOT_DIR_PATH, f"{timestamp}_{PredictionConstants.OUTPUT_FILE_NAME}")
+    OUTPUT_FILE_PATH = os.path.join(PREDICTION_ROOT_DIR_PATH,PredictionConstants.OUTPUT_FILE_NAME)
 
 

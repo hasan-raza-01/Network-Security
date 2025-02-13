@@ -65,7 +65,6 @@ async def train_route():
 async def predict_route(request: Request,file: UploadFile = File(...)):
     try:
         df = pd.DataFrame(Numpy.load(file.file))
-        input_data = df.iloc[:, :-1]
         try:
             # Initialize Dagshub
             dagshub.init(repo_owner='hasan-raza-01', repo_name='Network-Security', mlflow=True)
@@ -76,7 +75,7 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         except:
             model = load_obj(ModelTrainerConfig.ESTIMATOR_FILE_PATH)
         preprocessor = load_obj(DataTransformationConfig.PREPROCESSOR_PATH)
-        pipeline = PredictionPipeline(model, preprocessor, data=input_data)
+        pipeline = PredictionPipeline(model, preprocessor, data=df)
         pred = pipeline.main()
         #df['predicted_column'].replace(-1, 0)
         #return df.to_json()
