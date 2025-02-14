@@ -9,4 +9,3 @@ artifacts
 mlruns
 bentofile.yaml
 .bentoignore
-service.py
