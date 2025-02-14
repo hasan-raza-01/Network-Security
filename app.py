@@ -31,6 +31,9 @@ client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
 
 from package.constants import DataIngestionConstants
 
+# Initialize Dagshub
+dagshub.init(repo_owner='hasan-raza-01', repo_name='Network-Security', mlflow=True)
+
 database = client[DataIngestionConstants.DATABASE_NAME]
 collection = database[DataIngestionConstants.COLLECTION_NAME]
 
@@ -66,8 +69,6 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
     try:
         df = pd.DataFrame(Numpy.load(file.file))
         try:
-            # Initialize Dagshub
-            dagshub.init(repo_owner='hasan-raza-01', repo_name='Network-Security', mlflow=True)
 
             # # load model from mlflow
             model_name = load_json(ModelTrainerConfig.CONFIG_FILE_PATH)["model"]

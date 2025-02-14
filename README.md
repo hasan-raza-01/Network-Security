@@ -1,7 +1,7 @@
 # Network-Security
 
 
-### Workflows
+## Workflows
 
 1. Update config.yaml
 2. Update .env[optional]
@@ -44,3 +44,13 @@ sudo usermod -aG docker ubuntu
 ```
 newgrp docker
 ```
+
+# reconnect with runner
+```
+cd actions-runner
+```
+
+```
+./run.sh
+```
+
