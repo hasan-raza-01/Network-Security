@@ -45,6 +45,13 @@ sudo usermod -aG docker ubuntu
 newgrp docker
 ```
 
+## add environment variables to Ec2 instance
+### create/edit the .env file:
+```
+nano /home/ubuntu/.env
+```
+####  paste all variables and press CTRL+X, Y, ENTER
+
 ## reconnect with runner
 ```
 cd actions-runner
