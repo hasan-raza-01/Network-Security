@@ -13,7 +13,7 @@
 8. Update the main.py
 9. Update the dvc.yaml
 
-# Setup github secrets:
+## Setup github secrets:
 1. AWS_ACCESS_KEY_ID
 2. AWS_SECRET_ACCESS_KEY
 3. AWS_REGION
@@ -27,7 +27,7 @@
 sudo apt-get update -y
 ```
 ```
-sudo apt-get upgrade
+sudo apt-get upgrade -y
 ```
 
 ### required
@@ -45,7 +45,7 @@ sudo usermod -aG docker ubuntu
 newgrp docker
 ```
 
-# reconnect with runner
+## reconnect with runner
 ```
 cd actions-runner
 ```
