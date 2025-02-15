@@ -1,10 +1,12 @@
+venv/
+__pycache__/
+notebook/
+logs/
+mlruns/
+test_application/
+# Files
 template.py
-venv
-__pycache__
-notebook
-logs
-artifacts
+.env
 *.egg-info
 bentofile.yaml
 .bentoignore
-test_application

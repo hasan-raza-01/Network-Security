@@ -57,10 +57,10 @@ class DataIngestionComponents:
 
             # loading vulnarable variables
             load_dotenv()
-            URI = os.getenv("URI")
+            MONGODB_URI = os.getenv("MONGODB_URI")
             
             # connecting to mongodb
-            client = MongoClient(URI)
+            client = MongoClient(MONGODB_URI)
             logging.info("connected tot mongodb")
             
             database_name = self.data_ingestion_config.DATABASE_NAME

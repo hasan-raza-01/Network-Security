@@ -184,4 +184,3 @@ template.py
 *.egg-info
 bentofile.yaml
 .bentoignore
-service.py

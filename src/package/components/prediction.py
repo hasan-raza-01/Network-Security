@@ -4,7 +4,7 @@ from package.utils import create_dirs, save_json
 from package.entity import PredictionConfigEntity
 from package.logger import logging
 from datetime import datetime
-import sys
+import sys, os
 
 
 @dataclass
@@ -38,10 +38,15 @@ class PredictionComponents:
             prediction = self.model.predict(data).tolist()
             logging.info("Data transformed and predicted")
 
-            # save prediction
+            # create path for output file
             timestamp = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-            prediction_file_path =f"{"\\".join(self.prediction_config.OUTPUT_FILE_PATH.split("\\")[:-1])}\\{timestamp}_{self.prediction_config.OUTPUT_FILE_PATH.split("\\")[-1]}"
+            OUTPUT_FILE_DIR,  OUTPUT_FILE_NAME= os.path.split(self.prediction_config.OUTPUT_FILE_PATH)
+            prediction_file_path = os.path.join(OUTPUT_FILE_DIR, f"{timestamp}_{OUTPUT_FILE_NAME}")
+
+            # create content for ouptput file
             model_prediction_file_content = {"input":data.tolist(), "pred":prediction}
+
+            # save prediction
             save_json(model_prediction_file_content, prediction_file_path)
             logging.info(f"Prediction saved at {prediction_file_path}")
 
