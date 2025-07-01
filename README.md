@@ -61,3 +61,13 @@ cd actions-runner
 ./run.sh
 ```
 
+## (Optional but recommended) Run it as a service 
+### Instead of ./run.sh 
+- install the runner as a background service
+```
+sudo ./svc.sh install
+```
+- start the runner on background 
+```
+sudo ./svc.sh start
+```
