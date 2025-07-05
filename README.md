@@ -58,6 +58,8 @@ nano /home/<username>/.env
 ```
 ####  paste all variables and press CTRL+X, Y, ENTER
 
+## create a github runner for linux from https://github.com/<username>/<repository>/settings/actions/runners/
+
 ## reconnect with runner
 ```
 cd actions-runner
