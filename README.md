@@ -30,6 +30,12 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 ```
 
+## chech username in server
+```
+ls /home
+```
+hint: default username of {azure:azureuser, aws:ubuntu} on ubuntu instance
+
 ### required
 
 ```
@@ -38,7 +44,6 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 ```
 sudo sh get-docker.sh
 ```
-hint: default username of {azure:azureuser, aws:ubuntu} on ubuntu instance
 ```
 sudo usermod -aG docker <username>
 ```
