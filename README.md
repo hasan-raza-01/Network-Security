@@ -60,11 +60,11 @@ nano /home/<username>/.env
 
 ## create a github runner for linux from https://github.com/your-username/your-repository/settings/actions/runners/
 
-## reconnect with runner
+## Enter the runner directory
 ```
 cd actions-runner
 ```
-
+## (Mannual/common)reconnect with runner
 ```
 ./run.sh
 ```
