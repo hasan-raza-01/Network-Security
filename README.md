@@ -34,7 +34,7 @@ sudo apt-get upgrade -y
 ```
 ls /home
 ```
-hint: default username of {azure:azureuser, aws:ubuntu} on ubuntu instance
+hint: default username of {azure:azureuser, aws:ubuntu} 
 
 ### required
 
