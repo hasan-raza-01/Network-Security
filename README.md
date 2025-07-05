@@ -20,7 +20,7 @@
 4. AWS_ECR_LOGIN_URI
 5. ECR_REPOSITORY_NAME
 
-## Docker Setup In EC2 commands to be Executed
+## Docker Setup In Ubuntu server commands to be Executed
 ### optinal
 
 ```
@@ -38,10 +38,10 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 ```
 sudo sh get-docker.sh
 ```
+hint: default username of {azure:azureuser, aws:ubuntu} on ubuntu instance
 ```
 sudo usermod -aG docker <username>
 ```
-hint: default username of {azure:azureuser, aws:ubuntu} on ubuntu instance
 ```
 newgrp docker
 ```
@@ -49,7 +49,7 @@ newgrp docker
 ## add environment variables to Ec2 instance
 ### create/edit the .env file:
 ```
-nano /home/ubuntu/.env
+nano /home/<username>/.env
 ```
 ####  paste all variables and press CTRL+X, Y, ENTER
 
