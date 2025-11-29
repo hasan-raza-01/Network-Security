@@ -239,12 +239,11 @@ The `.github/workflows/` automates:
 ### Environment Variables for CI/CD
 
 ```bash
-URI=mongodb_connection_string
 AWS_ACCESS_KEY_ID=aws_access_key
 AWS_SECRET_ACCESS_KEY=aws_secret_key
-S3_BUCKET=s3_bucket_name
-MLFLOW_TRACKING_URI=dagshub_mlflow_uri
-DAGSHUB_TOKEN=dagshub_token
+AWS_ECR_LOGIN_URI=aws_uri_ECR
+AWS_REGION=aws_region
+ECR_REPOSITORY_NAME=ECR_repository_name
 ```
 
 
