@@ -127,17 +127,182 @@ Dockerfile for seamless local or cloud deployment with all dependencies packaged
 
 ### Cloud Infrastructure
 
-- **Database**: MongoDB Atlas for raw network traffic data storage
+- **Compute**: AWS EC2 instance (self-hosted GitHub runner)
+- **Container Registry**: AWS Elastic Container Registry (ECR) for Docker images
+- **Database**: MongoDB Atlas for network traffic data storage
 - **Storage**: AWS S3 for artifact backups and data versioning
 - **Experiment Tracking**: DagshHub (hosted MLflow server)
-- **Compute**: Containerized deployment via Docker
 
 
 ### CI/CD Pipeline
 
-- **GitHub Actions** (`.github/workflows/`): Automated testing, DVC pipeline execution, and Docker builds
-- **DVC Integration**: Reproducible pipeline orchestration
-- **Environment Configuration**: Secrets stored in `.env` or environment variables
+The `.github/workflows/main.yaml` automates testing, building, and deployment through three stages:
+
+#### **Stage 1: Continuous Integration**
+
+- **Runner**: `ubuntu-latest` (GitHub-hosted)
+- **Steps**:
+    - Checkout code from main branch
+    - Lint repository
+    - Run unit tests
+- **Trigger**: Push to main branch (ignores README.md changes)
+
+
+#### **Stage 2: Continuous Delivery (Build \& Push)**
+
+- **Runner**: `ubuntu-latest` (GitHub-hosted)
+- **Steps**:
+
+1. Install utilities (`jq`, `unzip`)
+2. Configure AWS credentials using GitHub Secrets
+3. Login to Amazon ECR
+4. Build Docker image from `Dockerfile`
+5. Tag image as `latest`
+6. Push to ECR repository
+- **Dependencies**: Runs after integration stage passes
+
+
+#### **Stage 3: Continuous Deployment**
+
+- **Runner**: `self-hosted` (EC2 instance with GitHub Actions runner)
+- **Steps**:
+
+1. Configure AWS credentials
+2. Login to Amazon ECR
+3. Pull latest Docker image from ECR
+4. Run container on EC2 instance:
+        - Port mapping: `8080:8000` (host:container)
+        - Environment variables: Loaded from `/home/ubuntu/.env`
+        - Container name: `networksecurity`
+        - IPC mode: `host` (for shared memory)
+5. Clean up unused Docker resources (`docker system prune -af`)
+- **Dependencies**: Runs after build-and-push stage completes
+
+
+### GitHub Secrets Configuration
+
+**Required secrets in GitHub repository settings:**
+
+```bash
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1  # or your preferred region
+ECR_REPOSITORY_NAME=network-security
+AWS_ECR_LOGIN_URI=123456789012.dkr.ecr.us-east-1.amazonaws.com
+```
+
+
+### EC2 Instance Setup
+
+**Prerequisites on EC2:**
+
+1. **Docker Installation**: Docker engine installed and running
+2. **GitHub Actions Runner**: Self-hosted runner configured and connected to repository
+3. **AWS CLI**: Configured with ECR pull permissions
+4. **Environment File**: `/home/ubuntu/.env` with application secrets:
+
+```bash
+URI=mongodb_atlas_connection_string
+AWS_ACCESS_KEY_ID=aws_access_key
+AWS_SECRET_ACCESS_KEY=aws_secret_key
+S3_BUCKET=s3_bucket_name
+MLFLOW_TRACKING_URI=https://dagshub.com/username/Network-Security.mlflow
+DAGSHUB_TOKEN=dagshub_token
+```
+
+5. **Security Group**: Inbound rules allowing port 8080 (HTTP traffic)
+
+### IAM Permissions
+
+**ECR Permissions** (for GitHub Actions and EC2):
+
+- `ecr:GetAuthorizationToken`
+- `ecr:BatchCheckLayerAvailability`
+- `ecr:GetDownloadUrlForLayer`
+- `ecr:BatchGetImage`
+- `ecr:PutImage` (for push operations)
+- `ecr:InitiateLayerUpload`
+- `ecr:UploadLayerPart`
+- `ecr:CompleteLayerUpload`
+
+**S3 Permissions** (for artifact storage):
+
+- `s3:PutObject`
+- `s3:GetObject`
+- `s3:ListBucket`
+
+
+### Deployment Flow
+
+```
+Code Push (main branch)
+         ↓
+GitHub Actions (ubuntu-latest)
+         ↓
+    Integration Tests
+         ↓
+  Build Docker Image
+         ↓
+Push to AWS ECR (latest tag)
+         ↓
+Self-Hosted Runner (EC2)
+         ↓
+  Pull Image from ECR
+         ↓
+Run Container on EC2 (Port 8080)
+         ↓
+Application Live at http://<ec2-public-ip>:8080
+```
+
+
+***
+
+## 🔄 Manual Deployment (Alternative)
+
+If you need to deploy manually without CI/CD:
+
+### 1. Build and Push to ECR
+
+```bash
+# Authenticate Docker to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
+
+# Build image
+docker build -t network-security:latest .
+
+# Tag for ECR
+docker tag network-security:latest 123456789012.dkr.ecr.us-east-1.amazonaws.com/network-security:latest
+
+# Push to ECR
+docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/network-security:latest
+```
+
+
+### 2. Deploy on EC2
+
+SSH into your EC2 instance:
+
+```bash
+# Login to ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.us-east-1.amazonaws.com
+
+# Pull latest image
+docker pull 123456789012.dkr.ecr.us-east-1.amazonaws.com/network-security:latest
+
+# Stop existing container (if running)
+docker stop networksecurity && docker rm networksecurity
+
+# Run new container
+docker run -d -p 8080:8000 \
+  --ipc="host" \
+  --name=networksecurity \
+  --env-file /home/ubuntu/.env \
+  123456789012.dkr.ecr.us-east-1.amazonaws.com/network-security:latest
+
+# Clean up unused resources
+docker system prune -af
+```
+
 
 ***
 
