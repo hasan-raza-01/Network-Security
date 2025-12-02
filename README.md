@@ -2,7 +2,15 @@
 
 An end-to-end, production-grade ML pipeline for automated network intrusion detection. By combining XGBoost classification, DVC versioning, MLflow experiment tracking (via DagshHub), and a FastAPI web interface, this system delivers accurate threat detection with full reproducibility and traceability—ready for deployment.
 
-***
+---
+
+## 📊 Project Workflow
+
+![Project Workflow](./screenshots/workflow.png)
+
+*Complete end-to-end pipeline from data ingestion to deployment*
+
+--- 
 
 ## 📂 Repository Structure
 
