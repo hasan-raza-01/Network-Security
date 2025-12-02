@@ -8,32 +8,194 @@ An end-to-end, production-grade ML pipeline for automated network intrusion dete
 
 ```
 .
-├── .dvc/                          # DVC configuration & cache
-├── .github/workflows/             # CI/CD pipelines
-├── config/                        # Project-wide YAML configuration
-├── notebook/                      # Exploratory data analysis & experiments
-├── schema/                        # Saved schema definitions (YAML)
+├── .dvc/                          # DVC configuration & cache for data version control
+├── .github/
+│   └── workflows/
+│       └── main.yaml              # CI/CD pipeline: integration, build, and deployment automation
+├── assets/                        # Static resources (images, diagrams)
+├── config/
+│   └── config.yaml                # Project-wide configuration: artifact paths, MongoDB settings, S3 bucket details
+├── notebook/                      # Jupyter notebooks for EDA, experimentation, and prototyping
+├── schema/                        # YAML schema definitions for data validation (column names, data types)
 ├── src/
-│   └── package/                   # Package source
-│       ├── configuration.py       # Config dataclasses
-│       ├── pipeline/              # Ingestion, validation, transformation, training, prediction
-│       ├── components/            # Data ingestion, transformation, model training
-│       ├── utils/                 # Model helpers, file I/O utilities
-│       ├── logger.py              # Logging setup
-│       ├── exception.py           # Custom exceptions
-│       └── constants.py           # Project constants
-├── templates/                     # Jinja2 templates for web UI
-├── ETL.py                         # Orchestrates MongoDB ingestion, S3 push, schema save
-├── dvc.yaml / dvc.lock            # Pipeline stage definitions & lock file
-├── params.json                    # Pipeline hyperparameters
-├── Dockerfile                     # Container image for deployment
-├── app.py                         # FastAPI application entry point
-├── main.py                        # Training pipeline orchestrator
-├── service.py                     # Service configuration
-├── requirements.txt               # Python dependencies
-└── setup.py                       # Package installer
+│   └── package/                   # Main package source code
+│       ├── __init__.py            # Package initializer
+│       ├── cloud/
+│       │   └── __init__.py        # AWS S3 operations: upload/download artifacts and data backups
+│       ├── components/            # Core ML pipeline components
+│       │   ├── __init__.py
+│       │   ├── data_ingestion.py       # Fetches data from MongoDB, performs train-test split, saves to S3
+│       │   ├── data_validation.py      # Validates schema, column names, data types, and missing values
+│       │   ├── data_transformation.py  # Handles missing values, feature encoding, scaling, and preprocessing
+│       │   ├── model_trainer.py        # Trains XGBoost classifier, logs metrics to MLflow, saves best model
+│       │   └── prediction.py           # Loads trained model and preprocessor for batch predictions
+│       ├── configuration/
+│       │   └── mongo_db_connection.py # MongoDB Atlas connection handler with SSL certificate support
+│       ├── constants/
+│       │   └── __init__.py        # Project-level constants: file names, artifact paths, environment variables
+│       ├── entity/
+│       │   ├── __init__.py        # Dataclass entities for artifacts and configuration objects
+│       │   ├── artifact_entity.py # Defines output artifacts for each pipeline stage
+│       │   └── config_entity.py   # Configuration dataclasses for pipeline components
+│       ├── exception/
+│       │   └── __init__.py        # Custom exception handling with detailed error messages and tracebacks
+│       ├── logger/
+│       │   └── __init__.py        # Structured logging setup with timestamps and log rotation
+│       ├── pipeline/              # Orchestration layer for training and prediction pipelines
+│       │   ├── __init__.py
+│       │   ├── stage_01_data_ingestion.py      # Orchestrates data ingestion component
+│       │   ├── stage_02_data_validation.py     # Orchestrates data validation component
+│       │   ├── stage_03_data_transformation.py # Orchestrates data transformation component
+│       │   ├── stage_04_model_trainer.py       # Orchestrates model training component
+│       │   ├── prediction_pipeline/
+│       │   │   └── __init__.py    # Prediction pipeline: loads model and preprocessor for inference
+│       │   └── training_pipeline/
+│       │       └── __init__.py    # Training pipeline: executes all 4 stages sequentially
+│       └── utils/
+│           └── __init__.py        # Utility functions: file I/O (YAML, JSON, pickle), model loading/saving
+├── templates/                     # Jinja2 HTML templates for web UI
+│   ├── index.html                 # Upload interface for batch predictions
+│   └── results.html               # Displays prediction results in tabular format
+├── .dockerignore                  # Excludes unnecessary files from Docker image build
+├── .dvcignore                     # Files ignored by DVC version control
+├── .gitignore                     # Git exclusions: virtual environments, artifacts, secrets
+├── Dockerfile                     # Multi-stage container image for production deployment
+├── ETL.py                         # Orchestrates MongoDB → pandas → S3 pipeline and saves schema to YAML
+├── app.py                         # FastAPI application: /train and /predict endpoints
+├── dvc.lock                       # DVC lock file: ensures reproducibility with artifact hashes
+├── dvc.yaml                       # DVC pipeline definition: stages, dependencies, and outputs
+├── main.py                        # Training pipeline orchestrator: runs all 4 stages via DVC
+├── params.json                    # Hyperparameters for XGBoost model (n_estimators, learning_rate, etc.)
+├── requirements.txt               # Python dependencies: scikit-learn, XGBoost, FastAPI, DVC, MLflow, etc.
+├── service.py                     # Service configuration: port settings, CORS, and app metadata
+└── setup.py                       # Package installer: configures package for pip installation
 ```
 
+### 📁 Directory & File Descriptions
+
+#### **Root Configuration Files**
+- **`.dockerignore`**: Specifies files excluded from Docker image builds (e.g., `.git`, `__pycache__`, `.env`) to reduce image size
+- **`.dvcignore`**: Defines files DVC should ignore during version control operations
+- **`.gitignore`**: Standard Git exclusions for Python projects (virtual environments, compiled files, secrets, artifacts)
+- **`Dockerfile`**: Multi-stage build configuration for creating production-ready container images with Python dependencies
+- **`dvc.yaml`**: Defines reproducible ML pipeline stages with dependencies and outputs tracked by DVC
+- **`dvc.lock`**: Locks artifact versions with MD5 hashes to ensure exact reproducibility across environments
+- **`params.json`**: Centralized hyperparameter configuration for XGBoost model tuning
+- **`requirements.txt`**: Python package dependencies with versions for consistent environment setup
+- **`setup.py`**: Package metadata and installation configuration for pip/setuptools
+
+#### **Application Entry Points**
+- **`ETL.py`**: Data ingestion script that pulls network traffic data from MongoDB Atlas, converts to pandas DataFrame, saves to local storage and S3, and generates schema YAML for validation
+- **`app.py`**: FastAPI web application serving two endpoints:
+  - `GET /train`: Triggers complete training pipeline
+  - `POST /predict`: Accepts NumPy file upload for batch intrusion detection
+- **`main.py`**: Manual training pipeline executor that sequentially runs all 4 stages (ingestion → validation → transformation → training)
+- **`service.py`**: Application service configuration including port settings, CORS policies, and API metadata
+
+#### **`.github/workflows/`**
+- **`main.yaml`**: GitHub Actions CI/CD pipeline with three stages:
+  1. **Integration**: Linting and unit tests on ubuntu-latest runner
+  2. **Build & Push**: Docker image creation and push to AWS ECR
+  3. **Deployment**: Pulls image and runs container on self-hosted EC2 runner
+
+#### **`config/`**
+- **`config.yaml`**: Project-wide YAML configuration containing:
+  - Artifact directory paths for each pipeline stage
+  - MongoDB database and collection names
+  - AWS S3 bucket configuration
+  - File naming conventions
+
+#### **`schema/`**
+Contains YAML schema files generated by `ETL.py` that define:
+- Expected column names for validation
+- Data types for each feature
+- Categorical vs numerical feature lists
+
+#### **`src/package/components/`**
+Core ML pipeline components implementing business logic:
+- **`data_ingestion.py`**: MongoDB Atlas data fetching, train-test split (80/20), and S3 backup operations
+- **`data_validation.py`**: Schema validation against saved YAML, missing value checks, data type verification
+- **`data_transformation.py`**: Handles missing values with KNN imputer, one-hot encoding for categorical features, robust scaling for numerical features, and saves preprocessing pipeline as pickle
+- **`model_trainer.py`**: XGBoost classifier training with hyperparameter tuning, MLflow experiment tracking (metrics, parameters, artifacts), and BentoML model packaging for serving
+- **`prediction.py`**: Loads trained model and preprocessor, applies transformations, and returns binary predictions (0=Normal, -1=Intrusion)
+
+#### **`src/package/pipeline/`**
+Orchestration layer that coordinates components:
+- **`stage_01_data_ingestion.py`**: Reads config, initializes DataIngestion component, executes ingestion
+- **`stage_02_data_validation.py`**: Validates ingested data against schema definitions
+- **`stage_03_data_transformation.py`**: Applies preprocessing transformations and saves artifacts
+- **`stage_04_model_trainer.py`**: Trains model, logs to MLflow, and saves best performer
+- **`training_pipeline/__init__.py`**: Sequential pipeline executor running all 4 stages with error handling
+- **`prediction_pipeline/__init__.py`**: Inference pipeline loading model/preprocessor and processing input data
+
+#### **`src/package/cloud/`**
+- **`__init__.py`**: S3Operations class for AWS interactions:
+  - `sync_folder_to_s3()`: Uploads local artifacts to S3 bucket
+  - `sync_folder_from_s3()`: Downloads artifacts from S3 for model serving
+
+#### **`src/package/utils/`**
+- **`__init__.py`**: Utility functions for file operations:
+  - `read_yaml()`: Loads YAML configuration files
+  - `write_yaml()`: Saves schema and config to YAML
+  - `save_object()`: Serializes Python objects (models, preprocessors) as pickle
+  - `load_object()`: Deserializes pickle files for inference
+  - `save_numpy_array_data()` / `load_numpy_array_data()`: NumPy array I/O operations
+
+#### **`src/package/configuration/`**
+- **`mongo_db_connection.py`**: MongoDB Atlas connection manager:
+  - Handles SSL certificate validation with certifi
+  - Establishes PyMongo client with connection string from environment variables
+  - Provides database and collection accessors
+
+#### **`src/package/entity/`**
+- **`artifact_entity.py`**: Dataclasses defining outputs from each pipeline stage:
+  - `DataIngestionArtifact`: Train/test file paths
+  - `DataValidationArtifact`: Validation status and report path
+  - `DataTransformationArtifact`: Transformed data paths and preprocessor file
+  - `ModelTrainerArtifact`: Trained model path and performance metrics
+- **`config_entity.py`**: Configuration dataclasses for each component:
+  - `DataIngestionConfig`: MongoDB settings, output paths
+  - `DataValidationConfig`: Schema file path, validation thresholds
+  - `DataTransformationConfig`: Preprocessor settings, output paths
+  - `ModelTrainerConfig`: Model hyperparameters, MLflow settings
+
+#### **`src/package/constants/`**
+- **`__init__.py`**: Project-wide constants:
+  - Environment variable names (e.g., `MONGODB_URI`, `AWS_ACCESS_KEY_ID`)
+  - Artifact directory structure (e.g., `artifacts/data_ingestion/`)
+  - File naming conventions (e.g., `train.csv`, `test.csv`, `model.pkl`)
+  - S3 bucket names and paths
+
+#### **`src/package/exception/`**
+- **`__init__.py`**: Custom exception class `NetworkSecurityException`:
+  - Captures detailed error messages with file name, line number, and traceback
+  - Integrates with logger for comprehensive error tracking
+  - Provides user-friendly error messages for debugging
+
+#### **`src/package/logger/`**
+- **`__init__.py`**: Logging configuration:
+  - Creates timestamped log files in `logs/` directory
+  - Formats logs with timestamp, log level, module name, and message
+  - Supports both file and console output
+  - Implements log rotation to prevent disk space issues
+
+#### **`templates/`**
+Jinja2 HTML templates for FastAPI web interface:
+- **`index.html`**: File upload form for batch prediction (accepts `.npy` files)
+- **`results.html`**: Displays prediction results in HTML table with color-coded threat levels
+
+#### **`notebook/`**
+Jupyter notebooks for:
+- Exploratory Data Analysis (EDA) on network traffic data
+- Feature importance analysis
+- Model experimentation and hyperparameter tuning
+- Visualizations of class distributions and feature correlations
+
+#### **`assets/`**
+Static resources including:
+- Architecture diagrams (system design, data flow)
+- Screenshots for documentation
+- Sample prediction outputs
 
 ***
 
